@@ -8,8 +8,15 @@ def archive(entries):
     with tarfile.open(fileobj=bio,mode="w") as tf:
         for name,data,mode in entries:
             info=tarfile.TarInfo(name)
-            info.size=len(data);info.mode=mode;info.uid=0;info.gid=0;info.mtime=0
-            tf.addfile(info,io.BytesIO(data))
+            info.mode=mode;info.uid=0;info.gid=0;info.mtime=0
+            if data is None:
+                info.type=tarfile.DIRTYPE
+                info.size=0
+                tf.addfile(info)
+            else:
+                info.type=tarfile.REGTYPE
+                info.size=len(data)
+                tf.addfile(info,io.BytesIO(data))
     return lzma.compress(bio.getvalue(),preset=6)
 def ar_member(name,data):
     if len(name)>15:raise ValueError(name)
@@ -38,8 +45,16 @@ Description: Experimental head-only aim, ESP HP, speed x1-x5, local health/invul
     readme=Path(__file__).resolve().parent.joinpath("README_VI.md").read_bytes()
     ctrl=archive([("control",control,0o644)])
     dat=archive([
+      ("./",None,0o755),
+      ("./Library/",None,0o755),
+      ("./Library/MobileSubstrate/",None,0o755),
+      ("./Library/MobileSubstrate/DynamicLibraries/",None,0o755),
       ("./Library/MobileSubstrate/DynamicLibraries/PGRealAimESP.dylib",blob,0o755),
       ("./Library/MobileSubstrate/DynamicLibraries/PGRealAimESP.plist",plist,0o644),
+      ("./usr/",None,0o755),
+      ("./usr/share/",None,0o755),
+      ("./usr/share/doc/",None,0o755),
+      ("./usr/share/doc/com.polygun.experimental.aim-esp/",None,0o755),
       ("./usr/share/doc/com.polygun.experimental.aim-esp/README_VI.md",readme,0o644),
     ])
     deb=b"!<arch>\n"+ar_member("debian-binary",b"2.0\n")+ar_member("control.tar.xz",ctrl)+ar_member("data.tar.xz",dat)

@@ -1,0 +1,26 @@
+
+name: Build PG Neon RootHide v0.4.0
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/**'
+      - 'build_macos.sh'
+      - 'make_deb.py'
+      - '.github/workflows/build-ios.yml'
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile and sign DYLIB; package experimental DEB
+        run: bash build_macos.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PG-Neon-v040-RootHide-Experimental
+          path: out/PG_Neon_v040_RootHide_EXPERIMENTAL.deb
+          if-no-files-found: error

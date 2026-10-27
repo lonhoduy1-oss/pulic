@@ -1,0 +1,19 @@
+HƯỚNG DẪN BUILD DEB - WINDOWS / GITHUB ACTIONS
+
+1. Giải nén file ZIP này trên Windows.
+2. Đăng nhập github.com > dấu + > New repository. Đặt tên ví dụ pg-neon-build, chọn Private, tạo repo.
+3. Trong repo chọn Add file > Upload files. Kéo thả cả nội dung thư mục đã giải nén, KHÔNG kéo file ZIP.
+   BẮT BUỘC phải có .github/workflows/build-ios.yml nằm đúng đường dẫn trong repo.
+   Đồng thời phải có src/PG_Neon_v040.c, build_macos.sh, make_deb.py, README_VI.md.
+4. Chọn Commit changes. Mở tab Actions; nếu được hỏi, chọn Enable workflows.
+5. Chọn workflow 'Build PG Neon RootHide v0.4.0' > Run workflow > Run workflow.
+6. Mở lần chạy mới. Khi trạng thái thành công, kéo xuống Artifacts.
+7. Tải 'PG-Neon-v040-RootHide-Experimental.zip' từ Artifacts, giải nén ra
+   PG_Neon_v040_RootHide_EXPERIMENTAL.deb.
+8. Chuyển DEB vào iPhone qua Files/Filza và mở bằng Sileo để cài (RootHide tương thích).
+
+LƯU Ý:
+- Mã và các tính năng GOD LOCAL / DMG LOCAL là thử nghiệm, chưa kiểm chứng hiệu quả online.
+- Nếu build thất bại, mở Actions > lần chạy > build > bước Compile để xem dòng lỗi.
+- Giữ bản sao DEB v0.3.2 nằm trong assets/ để cài lại nếu có lỗi.
+- Nếu tab Actions không thấy workflow, kiểm tra chính xác thư mục .github/workflows/build-ios.yml.
